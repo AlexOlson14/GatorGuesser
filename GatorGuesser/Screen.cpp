@@ -15,10 +15,10 @@ Screen::~Screen() { //not sure if I need this.
 }
 
 void Screen::showScreen(sf::RenderWindow& w) {
-    if (thingsToDraw.find("background") != thingsToDraw.end()) {
-        w.draw(thingsToDraw.find("background")->second);
+    if (spritesToDraw.find("background") != spritesToDraw.end()) {
+        w.draw(spritesToDraw.find("background")->second);
     }
-    for (auto i = thingsToDraw.begin(); i != thingsToDraw.end(); i++) {
+    for (auto i = spritesToDraw.begin(); i != spritesToDraw.end(); i++) {
         if (i->first != "background") {
             w.draw(i->second);
         }
@@ -35,8 +35,8 @@ void Screen::setText(string text_to_output, string where_to_display) {
     _text->setCharacterSize(35);
     _text->setFillColor(sf::Color::Black);
     sf::FloatRect textRect = _text->getLocalBounds();
-    sf::FloatRect RectangleShapeRect = thingsToDraw[where_to_display].getLocalBounds();
-    _text->setPosition(thingsToDraw[where_to_display].getPosition().x + (RectangleShapeRect.width / 2 - textRect.width / 2),
-        thingsToDraw[where_to_display].getPosition().y + (RectangleShapeRect.height / 2 - 25));
-    text[thingsToDraw[where_to_display].getPosition().x * thingsToDraw[where_to_display].getPosition().y] = _text;
+    sf::FloatRect RectangleShapeRect = spritesToDraw[where_to_display].getLocalBounds();
+    _text->setPosition(spritesToDraw[where_to_display].getPosition().x + (RectangleShapeRect.width / 2 - textRect.width / 2),
+        spritesToDraw[where_to_display].getPosition().y + (RectangleShapeRect.height / 2 - 25));
+    text[spritesToDraw[where_to_display].getPosition().x * spritesToDraw[where_to_display].getPosition().y] = _text;
 }
