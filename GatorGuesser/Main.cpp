@@ -8,7 +8,7 @@ using namespace std;
 int main()
 {
 
-    sf::RenderWindow window(sf::VideoMode(1000, 750), "GatorGuesser");
+    sf::RenderWindow window(sf::VideoMode(1200, 900), "GatorGuesser");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
     vector<Screen*> screens;
