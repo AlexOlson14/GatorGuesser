@@ -104,7 +104,7 @@ int main()
                             window.display();
 
                             randomImages.clear();
-                            for (int i = 1; i < 2; i++) {
+                            for (int i = 1; i < 12; i++) {
                                 string name = imageManager.getImage().name;
                                 randomImages.push_back(TextureManager::getTexture(name));
                             }
@@ -118,11 +118,21 @@ int main()
                             window.close();
                         }
                     }
-                    if (gameScreen.needToDraw) {
+                    else if (gameScreen.needToDraw) {
                         //Switch the events
-                        //sf::Texture temp = *focus.getTexture();
-                        //gameScreen.spritesToDraw.find("background")->second.setTexture(*noFocus.getTexture());
-                        //gameScreen.spritesToDraw.find("picture")->second.setTexture(temp);
+                        if (counter < randomImages.size()) //not last
+                        {
+                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[counter]);
+                            counter++;
+
+                        }
+                        else //last one
+                        {
+                            titleMenu.needToDraw = true;
+                            gameScreen.needToDraw = false;
+                        }
+
+
                     }
                 }
             }
