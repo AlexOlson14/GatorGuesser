@@ -16,6 +16,7 @@ SFML-2.5.1/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+*.ipch
 
 # Build results
 [Dd]ebug/
