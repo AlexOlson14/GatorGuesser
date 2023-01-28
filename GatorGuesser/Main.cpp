@@ -13,21 +13,14 @@ int main()
 
     
 
-    sf::Sprite splashScreen;
-    //splashScreen.setTextureRect(sf::IntRect(0, 0, 1000, 750));
-    splashScreen.setTexture(TextureManager::getTexture("GatorGuesser"));
-    //splashScreen.set
+    sf::Sprite loadingScreen;
+    loadingScreen.setTexture(TextureManager::getTexture("GatorGuesser"));
     sf::Event event;
-    window.draw(splashScreen);
-    window.display();
-    bool needToBreak = false;
-
+    
 
     vector<Screen*> screens;
     vector<sf::Texture> randomImages;
-    for (int i = 1; i < 6; i++) {
-        randomImages.push_back(TextureManager::getTexture("sam" + to_string(i)));
-    }
+    
 
 
 
@@ -36,7 +29,7 @@ int main()
    
     
     //Title Screen setup
-    Screen titleMenu(false);
+    Screen titleMenu(true);
     screens.push_back(&titleMenu);
     sf::Sprite Start(TextureManager::getTexture("Start"));
     Start.setPosition(650, 350);
@@ -60,26 +53,7 @@ int main()
     //bottomRight.setScale((1 / 3), (1 / 3));
    
     
-    //splash screen stuff
-    while (true) {
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
-                if (event.mouseButton.button == sf::Mouse::Left)
-                {
-                    needToBreak = true;
-                }
-            }
-        }
-        if (needToBreak)
-        {
-            titleMenu.needToDraw = true;
-            break;
-        }
-        window.clear();
-        window.draw(splashScreen);
-        window.display();
-    }
+ 
 
     while (window.isOpen())
     {
@@ -99,8 +73,19 @@ int main()
                     if (titleMenu.needToDraw) {
                         if (titleMenu.spritesToDraw.find("Start")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             titleMenu.needToDraw = false;
+                            window.clear();
+                            window.draw(loadingScreen);
+                            window.display();
+
+                            randomImages.clear();
+                            for (int i = 1; i < 6; i++) {
+                                string name = imageManager.getImage().name;
+                                randomImages.push_back(TextureManager::getTexture(name));
+                                cout << "Name: " << name << endl;
+                            }
+
                             gameScreen.needToDraw = true;
-                            cout << "Clicked";
+                            
                         }
                     }
                 }
