@@ -83,7 +83,7 @@ int main()
     gameScreen.spritesToDraw.emplace("picture", noFocus);
     int counter = 0;
 
-    
+    bool lookingAtPicture = true;
  
 
     while (window.isOpen())
@@ -113,7 +113,7 @@ int main()
                             gameScreen.needToDraw = true;
                             gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);
                             gameScreen.spritesToDraw.find("picture")->second.setTexture(map);
-                            counter = 1;
+                            counter = 0;
                         }
                         else if (titleMenu.spritesToDraw.find("Quit")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             window.close();
@@ -122,19 +122,58 @@ int main()
 
                     else if (gameScreen.needToDraw) {
                         //Switch the events
-                        if (counter < randomImages.size()) //not last
-                        {
-                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[counter]);
-                            counter++;
+                        if (gameScreen.spritesToDraw.find("picture")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            if (!lookingAtPicture)
+                            {
+                                gameScreen.spritesToDraw.erase("background");
+                                gameScreen.spritesToDraw.erase("picture");
 
+                                sf::Sprite background;
+                                sf::Sprite picture;
+
+                                background.setScale(1200.0 / 4032.0, 1200.0 / 4032.0);
+                                picture.setScale(1.0 / 4.0, 1.0 / 4.0);
+                                picture.setPosition(850, 650);
+
+                                background.setTexture(randomImages[counter]);
+                                picture.setTexture(map);
+
+                                gameScreen.spritesToDraw.emplace("background", background);
+                                gameScreen.spritesToDraw.emplace("picture", picture);
+                                lookingAtPicture = !lookingAtPicture;
+                            }
+                            else
+                            {
+                                gameScreen.spritesToDraw.erase("background");
+                                gameScreen.spritesToDraw.erase("picture");
+
+                                sf::Sprite background;
+                                sf::Sprite picture;
+
+                                background.setScale(1, 1);
+                                picture.setScale(1200.0 / 4032.0 / 4.0, 1200.0 / 4032.0 / 4.0);
+                                picture.setPosition(850, 650);
+
+                                background.setTexture(map);
+                                picture.setTexture(randomImages[counter]);
+
+                                gameScreen.spritesToDraw.emplace("background", background);
+                                gameScreen.spritesToDraw.emplace("picture", picture);
+                                lookingAtPicture = !lookingAtPicture;
+                            }
                         }
-                        else //last one
+
+
+                        else if (counter < randomImages.size() - 1 && lookingAtPicture) //not last
+                        {
+                            counter++;
+                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[counter]);
+                        }
+                        else if (counter == randomImages.size() - 1 && lookingAtPicture) //last one
                         {
                             titleMenu.needToDraw = true;
                             gameScreen.needToDraw = false;
                         }
-
-
                     }
                 }
             }
