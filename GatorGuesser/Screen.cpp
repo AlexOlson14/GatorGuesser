@@ -6,7 +6,7 @@ Screen::Screen() {
 }
 Screen::Screen(bool showScreenOnCreation) {
     needToDraw = showScreenOnCreation;
-    _font->loadFromFile("../testSWEProject/src/Font/OpenSans-Regular.ttf");
+    //_font->loadFromFile("../testSWEProject/src/Font/OpenSans-Regular.ttf");
 }
 
 Screen::~Screen() { //not sure if I need this.

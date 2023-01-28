@@ -8,10 +8,10 @@ using namespace std;
 int main()
 {
 
-    sf::RenderWindow window(sf::VideoMode(1000, 750), "GatorGuesser");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    sf::RenderWindow window(sf::VideoMode(1200, 900), "GatorGuesser");
     vector<Screen*> screens;
+
+
     sf::Sprite splashScreen;
     //splashScreen.setTextureRect(sf::IntRect(0, 0, 1000, 750));
     splashScreen.setTexture(TextureManager::getTexture("GatorGuesser"));
@@ -19,6 +19,13 @@ int main()
     sf::Event event;
     bool needToBreak = false;
 
+
+    
+    
+
+
+
+    //splash scrren stuff
     while (true) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::MouseButtonPressed)
@@ -40,7 +47,20 @@ int main()
    
     
     //Title Screen setup
-    Screen titleMenu(false);
+    Screen titleMenu(true);
+    sf::Sprite playButton(TextureManager::getTexture("playButton"));
+    playButton.setPosition(600, 300);
+
+    sf::Sprite exitButton(TextureManager::getTexture("exitButton"));
+    exitButton.setPosition(600, 500);
+
+    titleMenu.spritesToDraw.emplace("playButton", playButton);
+    titleMenu.spritesToDraw.emplace("exitButton", exitButton);
+
+    Screen gameMenu(false);
+    sf::Sprite inFocus;
+    sf::Sprite bottomRight;
+
 
 
     while (window.isOpen())
@@ -58,13 +78,19 @@ int main()
                 }
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-
+                    if (titleMenu.needToDraw) {
+                        
+                    }
                 }
             }
         }
 
-        window.clear();
-        window.draw(shape);
+        window.clear(sf::Color::White);
+        for (int i = 0; i < screens.size(); i++) {
+            if (screens.at(i)->needToDraw) {
+                screens.at(i)->showScreen(window);
+            }
+        }
         window.display();
     }
 
