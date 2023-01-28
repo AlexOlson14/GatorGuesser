@@ -70,6 +70,7 @@ int main()
     pin.setRadius(3);
 
     ImageProvider imageManager;
+
     sf::Sprite focus;
     sf::Sprite noFocus;
 
@@ -119,10 +120,17 @@ int main()
                         }
                     }
                     if (gameScreen.needToDraw) {
+
+                        if (gameScreen.spritesToDraw.find("map")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) &&
+                            !gameScreen.spritesToDraw.find("image")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            cout << "Clicked on the focused image" << endl;
+                        }
+
                         //Switch the events
                         //sf::Texture temp = *focus.getTexture();
                         //gameScreen.spritesToDraw.find("background")->second.setTexture(*noFocus.getTexture());
                         //gameScreen.spritesToDraw.find("picture")->second.setTexture(temp);
+
                     }
                 }
             }
