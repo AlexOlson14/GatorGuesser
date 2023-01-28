@@ -53,7 +53,10 @@ int main()
     pin.setRadius(3);
     ImageProvider imageManager;
     sf::Sprite inFocus(TextureManager::getTexture(imageManager.getImage().name));
+    inFocus.scale(1200.0 / 4032.0, 1200.0 / 4032.0);
+    gameScreen.spritesToDraw.emplace("image", inFocus);
     sf::Sprite bottomRight(TextureManager::getTexture("map"));
+    //gameScreen.spritesToDraw.emplace("map", bottomRight);
     //bottomRight.setScale((1 / 3), (1 / 3));
    
     
@@ -78,7 +81,7 @@ int main()
                             window.display();
 
                             randomImages.clear();
-                            for (int i = 1; i < 6; i++) {
+                            for (int i = 1; i < 2; i++) {
                                 string name = imageManager.getImage().name;
                                 randomImages.push_back(TextureManager::getTexture(name));
                                 cout << "Name: " << name << endl;
@@ -104,9 +107,7 @@ int main()
                 screens.at(i)->showScreen(window);
             }
             if (gameScreen.needToDraw) {
-                pin.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
-                cout << "X: " << sf::Mouse::getPosition().x << endl;
-                cout << "Y: " << sf::Mouse::getPosition().y << endl << endl;
+                pin.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
                 window.draw(pin);
             }
         }
