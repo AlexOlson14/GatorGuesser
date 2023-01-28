@@ -63,6 +63,8 @@ int main()
     
 
     Screen gameScreen(false);
+    bool lookingAtMap = false;
+    bool movingPin = true;
     screens.push_back(&gameScreen);
 
     sf::CircleShape pin;
@@ -82,6 +84,13 @@ int main()
     gameScreen.spritesToDraw.emplace("background", focus);
     gameScreen.spritesToDraw.emplace("picture", noFocus);
     int counter = 0;
+
+    Screen answerScreen(false);
+    screens.push_back(&answerScreen);
+    
+    sf::Sprite bigMap(TextureManager::getTexture("map"));
+    sf::CircleShape correctSpot(3);
+    answerScreen.spritesToDraw.emplace("background", bigMap);
 
     
  
@@ -111,7 +120,7 @@ int main()
                             }
 
                             gameScreen.needToDraw = true;
-                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);
+                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);    
                             gameScreen.spritesToDraw.find("picture")->second.setTexture(map);
                             counter = 1;
                         }
@@ -119,18 +128,30 @@ int main()
                             window.close();
                         }
                     }
-                    if (gameScreen.needToDraw) {
-
-                        if (gameScreen.spritesToDraw.find("map")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) &&
-                            !gameScreen.spritesToDraw.find("image")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                    else if (gameScreen.needToDraw) {
+                        
+                        if (gameScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) &&
+                            !gameScreen.spritesToDraw.find("picture")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             cout << "Clicked on the focused image" << endl;
+                            if (lookingAtMap) {
+                                //round is over, show the correct spot and points earned, wait for click to go to next.
+                                movingPin = false;
+                                lookingAtMap = false;
+                                
+                            }
+                            
                         }
-
-                        //Switch the events
-                        //sf::Texture temp = *focus.getTexture();
-                        //gameScreen.spritesToDraw.find("background")->second.setTexture(*noFocus.getTexture());
-                        //gameScreen.spritesToDraw.find("picture")->second.setTexture(temp);
-
+                        if (gameScreen.spritesToDraw.find("picture")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            cout << "SMALLER!" << endl;
+                            lookingAtMap = !lookingAtMap;
+                           
+                            
+                        }
+                        
+                        //gameScreen.spritesToDraw.find("background")->second.setTexture(TextureManager::getTexture("map"));
+                        //gameScreen.spritesToDraw.find("background")->second.setScale(1, 1);
+                        //gameScreen.spritesToDraw.find("picture")->second.setTexture(randomImages[0]);
+                        //gameScreen.spritesToDraw.find("picture")->second.setScale(1.0 / 4.0, 1.0 / 4.0);
                     }
                 }
             }
@@ -142,8 +163,12 @@ int main()
                 screens.at(i)->showScreen(window);
             }
             if (gameScreen.needToDraw) {
-                pin.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-                window.draw(pin);
+                if (movingPin) {
+                    pin.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+                }
+                if(lookingAtMap){
+                    window.draw(pin);
+                }
             }
         }
         window.display();
