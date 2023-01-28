@@ -70,6 +70,7 @@ int main()
     pin.setRadius(3);
 
     ImageProvider imageManager;
+
     sf::Sprite focus;
     sf::Sprite noFocus;
 
@@ -104,7 +105,7 @@ int main()
                             window.display();
 
                             randomImages.clear();
-                            for (int i = 1; i < 12; i++) {
+                            for (int i = 1; i < 6; i++) {
                                 string name = imageManager.getImage().name;
                                 randomImages.push_back(TextureManager::getTexture(name));
                             }
@@ -118,6 +119,7 @@ int main()
                             window.close();
                         }
                     }
+
                     else if (gameScreen.needToDraw) {
                         //Switch the events
                         if (counter < randomImages.size()) //not last
