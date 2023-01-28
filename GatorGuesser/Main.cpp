@@ -63,6 +63,8 @@ int main()
     
 
     Screen gameScreen(false);
+    bool lookingAtMap = false;
+    bool movingPin = true;
     screens.push_back(&gameScreen);
 
     sf::CircleShape pin;
@@ -83,7 +85,16 @@ int main()
     gameScreen.spritesToDraw.emplace("picture", noFocus);
     int counter = 0;
 
+
+    Screen answerScreen(false);
+    screens.push_back(&answerScreen);
+    
+    sf::Sprite bigMap(TextureManager::getTexture("map"));
+    sf::CircleShape correctSpot(3);
+    answerScreen.spritesToDraw.emplace("background", bigMap);
+    
     bool lookingAtPicture = true;
+
  
 
     while (window.isOpen())
@@ -111,7 +122,7 @@ int main()
                             }
 
                             gameScreen.needToDraw = true;
-                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);
+                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);    
                             gameScreen.spritesToDraw.find("picture")->second.setTexture(map);
                             counter = 0;
                         }
@@ -119,6 +130,7 @@ int main()
                             window.close();
                         }
                     }
+
 
                     else if (gameScreen.needToDraw) {
                         //Switch the events
@@ -185,8 +197,12 @@ int main()
                 screens.at(i)->showScreen(window);
             }
             if (gameScreen.needToDraw) {
-                pin.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-                window.draw(pin);
+                if (movingPin) {
+                    pin.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+                }
+                if(lookingAtMap){
+                    window.draw(pin);
+                }
             }
         }
         window.display();
