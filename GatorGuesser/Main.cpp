@@ -164,12 +164,27 @@ int main()
                         }
 
 
-                        else if (counter < randomImages.size() - 1 && lookingAtPicture) //not last
+                        else if (counter < randomImages.size() - 1 && !lookingAtPicture) //not last
                         {
                             counter++;
-                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[counter]);
+                            gameScreen.spritesToDraw.erase("background");
+                            gameScreen.spritesToDraw.erase("picture");
+
+                            sf::Sprite background;
+                            sf::Sprite picture;
+
+                            background.setScale(1200.0 / 4032.0, 1200.0 / 4032.0);
+                            picture.setScale(1.0 / 4.0, 1.0 / 4.0);
+                            picture.setPosition(850, 650);
+
+                            background.setTexture(randomImages[counter]);
+                            picture.setTexture(map);
+
+                            gameScreen.spritesToDraw.emplace("background", background);
+                            gameScreen.spritesToDraw.emplace("picture", picture);
+                            lookingAtPicture = true;
                         }
-                        else if (counter == randomImages.size() - 1 && lookingAtPicture) //last one
+                        else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
                             titleMenu.needToDraw = true;
                             gameScreen.needToDraw = false;
