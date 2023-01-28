@@ -9,6 +9,7 @@ int main()
 {
 
     sf::RenderWindow window(sf::VideoMode(1200, 900), "GatorGuesser");
+
     vector<Screen*> screens;
 
 
