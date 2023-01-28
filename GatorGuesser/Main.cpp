@@ -6,6 +6,26 @@
 #include "ImageProvider.h"
 using namespace std;
 
+// Calculate euclidean distance in pixels between two points
+int calculateDistance(int x1, int y1, int x2, int y2) {
+    return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+}
+
+// Pixels to feet conversion (for displaying info)
+int pixelsToFeet(int pixels) {
+    return pixels * 10;
+}
+
+// Calculate score based on pixel distance. If within 10 pixels, give 100 bonus points.
+int distanceToScore(int distance) {
+    int score = 1000 - distance;
+    if (score < 0)
+        score = 0;
+    if (distance < 10)
+        score += 100;
+    return score;
+}
+
 int main()
 {
 
