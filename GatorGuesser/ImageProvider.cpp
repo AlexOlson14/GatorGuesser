@@ -3,6 +3,7 @@
 #include "ImageProvider.h"
 
 ImageProvider::ImageProvider() {
+    srand(time(nullptr));
     ifstream file("ImageInfo.csv");
     if (file.is_open()) {
         string line;
