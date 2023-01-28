@@ -85,14 +85,16 @@ int main()
     gameScreen.spritesToDraw.emplace("picture", noFocus);
     int counter = 0;
 
+
     Screen answerScreen(false);
     screens.push_back(&answerScreen);
     
     sf::Sprite bigMap(TextureManager::getTexture("map"));
     sf::CircleShape correctSpot(3);
     answerScreen.spritesToDraw.emplace("background", bigMap);
-
     
+    bool lookingAtPicture = true;
+
  
 
     while (window.isOpen())
@@ -114,7 +116,7 @@ int main()
                             window.display();
 
                             randomImages.clear();
-                            for (int i = 1; i < 2; i++) {
+                            for (int i = 1; i < 6; i++) {
                                 string name = imageManager.getImage().name;
                                 randomImages.push_back(TextureManager::getTexture(name));
                             }
@@ -122,36 +124,68 @@ int main()
                             gameScreen.needToDraw = true;
                             gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);    
                             gameScreen.spritesToDraw.find("picture")->second.setTexture(map);
-                            counter = 1;
+                            counter = 0;
                         }
                         else if (titleMenu.spritesToDraw.find("Quit")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             window.close();
                         }
                     }
+
+
                     else if (gameScreen.needToDraw) {
-                        
-                        if (gameScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) &&
-                            !gameScreen.spritesToDraw.find("picture")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                            cout << "Clicked on the focused image" << endl;
-                            if (lookingAtMap) {
-                                //round is over, show the correct spot and points earned, wait for click to go to next.
-                                movingPin = false;
-                                lookingAtMap = false;
-                                
-                            }
-                            
-                        }
+                        //Switch the events
                         if (gameScreen.spritesToDraw.find("picture")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                            cout << "SMALLER!" << endl;
-                            lookingAtMap = !lookingAtMap;
-                           
-                            
+                            if (!lookingAtPicture)
+                            {
+                                gameScreen.spritesToDraw.erase("background");
+                                gameScreen.spritesToDraw.erase("picture");
+
+                                sf::Sprite background;
+                                sf::Sprite picture;
+
+                                background.setScale(1200.0 / 4032.0, 1200.0 / 4032.0);
+                                picture.setScale(1.0 / 4.0, 1.0 / 4.0);
+                                picture.setPosition(850, 650);
+
+                                background.setTexture(randomImages[counter]);
+                                picture.setTexture(map);
+
+                                gameScreen.spritesToDraw.emplace("background", background);
+                                gameScreen.spritesToDraw.emplace("picture", picture);
+                                lookingAtPicture = !lookingAtPicture;
+                            }
+                            else
+                            {
+                                gameScreen.spritesToDraw.erase("background");
+                                gameScreen.spritesToDraw.erase("picture");
+
+                                sf::Sprite background;
+                                sf::Sprite picture;
+
+                                background.setScale(1, 1);
+                                picture.setScale(1200.0 / 4032.0 / 4.0, 1200.0 / 4032.0 / 4.0);
+                                picture.setPosition(850, 650);
+
+                                background.setTexture(map);
+                                picture.setTexture(randomImages[counter]);
+
+                                gameScreen.spritesToDraw.emplace("background", background);
+                                gameScreen.spritesToDraw.emplace("picture", picture);
+                                lookingAtPicture = !lookingAtPicture;
+                            }
                         }
-                        
-                        //gameScreen.spritesToDraw.find("background")->second.setTexture(TextureManager::getTexture("map"));
-                        //gameScreen.spritesToDraw.find("background")->second.setScale(1, 1);
-                        //gameScreen.spritesToDraw.find("picture")->second.setTexture(randomImages[0]);
-                        //gameScreen.spritesToDraw.find("picture")->second.setScale(1.0 / 4.0, 1.0 / 4.0);
+
+
+                        else if (counter < randomImages.size() - 1 && lookingAtPicture) //not last
+                        {
+                            counter++;
+                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[counter]);
+                        }
+                        else if (counter == randomImages.size() - 1 && lookingAtPicture) //last one
+                        {
+                            titleMenu.needToDraw = true;
+                            gameScreen.needToDraw = false;
+                        }
                     }
                 }
             }
