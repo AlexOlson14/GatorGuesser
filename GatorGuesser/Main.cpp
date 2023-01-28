@@ -76,7 +76,7 @@ int main()
     inFocus.scale(1200.0 / 4032.0, 1200.0 / 4032.0);
     gameScreen.spritesToDraw.emplace("image", inFocus);
     sf::Sprite bottomRight(TextureManager::getTexture("map"));
-    //gameScreen.spritesToDraw.emplace("map", bottomRight);
+    gameScreen.spritesToDraw.emplace("map", bottomRight);
     //bottomRight.setScale((1 / 3), (1 / 3));
    
     
@@ -115,7 +115,10 @@ int main()
                         }
                     }
                     if (gameScreen.needToDraw) {
-                        
+                        if (gameScreen.spritesToDraw.find("map")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) &&
+                            !gameScreen.spritesToDraw.find("image")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            cout << "Clicked on the focused image" << endl;
+                        }
                     }
                 }
             }
