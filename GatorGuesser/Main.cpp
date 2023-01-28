@@ -47,6 +47,10 @@ int main()
 
     Screen gameScreen(false);
     screens.push_back(&gameScreen);
+
+    sf::CircleShape pin;
+    pin.setFillColor(sf::Color::Red);
+    pin.setRadius(3);
     ImageProvider imageManager;
     sf::Sprite inFocus(TextureManager::getTexture(imageManager.getImage().name));
     sf::Sprite bottomRight(TextureManager::getTexture("map"));
@@ -64,10 +68,6 @@ int main()
 
             if (event.type == sf::Event::MouseButtonPressed)
             {
-                if (event.mouseButton.button == sf::Mouse::Right)
-                {
-
-                }
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     if (titleMenu.needToDraw) {
@@ -87,6 +87,12 @@ int main()
                             gameScreen.needToDraw = true;
                             
                         }
+                        else if (titleMenu.spritesToDraw.find("Quit")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            window.close();
+                        }
+                    }
+                    if (gameScreen.needToDraw) {
+                        
                     }
                 }
             }
@@ -96,6 +102,12 @@ int main()
         for (int i = 0; i < screens.size(); i++) {
             if (screens.at(i)->needToDraw) {
                 screens.at(i)->showScreen(window);
+            }
+            if (gameScreen.needToDraw) {
+                pin.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+                cout << "X: " << sf::Mouse::getPosition().x << endl;
+                cout << "Y: " << sf::Mouse::getPosition().y << endl << endl;
+                window.draw(pin);
             }
         }
         window.display();
