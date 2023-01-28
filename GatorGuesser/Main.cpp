@@ -41,11 +41,8 @@ int main()
     vector<Screen*> screens;
     vector<sf::Texture> randomImages;
     
+    sf::Texture map = TextureManager::getTexture("map");
 
-
-
-
-   
    
     
     //Title Screen setup
@@ -71,14 +68,21 @@ int main()
     sf::CircleShape pin;
     pin.setFillColor(sf::Color::Red);
     pin.setRadius(3);
+
     ImageProvider imageManager;
-    sf::Sprite inFocus(TextureManager::getTexture(imageManager.getImage().name));
-    inFocus.scale(1200.0 / 4032.0, 1200.0 / 4032.0);
-    gameScreen.spritesToDraw.emplace("image", inFocus);
-    sf::Sprite bottomRight(TextureManager::getTexture("map"));
-    gameScreen.spritesToDraw.emplace("map", bottomRight);
-    //bottomRight.setScale((1 / 3), (1 / 3));
-   
+
+    sf::Sprite focus;
+    sf::Sprite noFocus;
+
+    focus.setScale(1200.0 / 4032.0, 1200.0 / 4032.0);
+    noFocus.setScale(1.0 / 4.0, 1.0 / 4.0);
+    noFocus.setPosition(850, 650);
+
+
+    gameScreen.spritesToDraw.emplace("background", focus);
+    gameScreen.spritesToDraw.emplace("picture", noFocus);
+    int counter = 0;
+
     
  
 
@@ -104,21 +108,29 @@ int main()
                             for (int i = 1; i < 2; i++) {
                                 string name = imageManager.getImage().name;
                                 randomImages.push_back(TextureManager::getTexture(name));
-                                cout << "Name: " << name << endl;
                             }
 
                             gameScreen.needToDraw = true;
-                            
+                            gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);
+                            gameScreen.spritesToDraw.find("picture")->second.setTexture(map);
+                            counter = 1;
                         }
                         else if (titleMenu.spritesToDraw.find("Quit")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             window.close();
                         }
                     }
                     if (gameScreen.needToDraw) {
+
                         if (gameScreen.spritesToDraw.find("map")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) &&
                             !gameScreen.spritesToDraw.find("image")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             cout << "Clicked on the focused image" << endl;
                         }
+
+                        //Switch the events
+                        //sf::Texture temp = *focus.getTexture();
+                        //gameScreen.spritesToDraw.find("background")->second.setTexture(*noFocus.getTexture());
+                        //gameScreen.spritesToDraw.find("picture")->second.setTexture(temp);
+
                     }
                 }
             }
