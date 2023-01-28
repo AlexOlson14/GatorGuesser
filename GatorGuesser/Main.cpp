@@ -3,6 +3,7 @@
 #include "TextureManager.h"
 #include <vector>
 #include <iostream>
+#include "ImageProvider.h"
 using namespace std;
 
 int main()
@@ -58,10 +59,13 @@ int main()
     titleMenu.spritesToDraw.emplace("playButton", playButton);
     titleMenu.spritesToDraw.emplace("exitButton", exitButton);
 
-    Screen gameMenu(false);
-    sf::Sprite inFocus;
-    sf::Sprite bottomRight;
-
+    Screen gameScreen(false);
+    ImageProvider imageManager;
+    sf::Sprite inFocus(TextureManager::getTexture(imageManager.getImage().name));
+    sf::Sprite bottomRight(TextureManager::getTexture("map"));
+    bottomRight.setScale((1 / 3), (1 / 3));
+   
+    
 
 
     while (window.isOpen())
@@ -80,7 +84,10 @@ int main()
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     if (titleMenu.needToDraw) {
-                        
+                        if (titleMenu.spritesToDraw.find("playButton")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            titleMenu.needToDraw = true;
+                            gameScreen.needToDraw = false;
+                        }
                     }
                 }
             }
