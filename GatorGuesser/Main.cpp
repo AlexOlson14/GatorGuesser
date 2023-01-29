@@ -228,6 +228,7 @@ int main()
 
                         else if (counter < randomImages.size() - 1 && !lookingAtPicture) //not last
                         {
+                            correctSpot.setPosition(images.at(counter).location.second, images.at(counter).location.first);
                             counter++;
 
                            
@@ -251,7 +252,6 @@ int main()
                             
                             gameScreen.needToDraw = false;
                             answerScreen.needToDraw = true;
-                            correctSpot.setPosition(images.at(counter).location.second, images.at(counter).location.first);
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
