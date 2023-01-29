@@ -269,7 +269,6 @@ int main()
                         if (answerScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             if (counter == randomImages.size() - 1) //last one
                             {
-                                cout << randomImages.size();
                                 pointScreen.needToDraw = true;
                                 answerScreen = false;
                                 string result = to_string(points);
