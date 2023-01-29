@@ -252,7 +252,7 @@ int main()
                             
                             gameScreen.needToDraw = false;
                             answerScreen.needToDraw = true;
-                            
+
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
