@@ -63,7 +63,6 @@ int main()
     
 
     Screen gameScreen(false);
-    bool lookingAtMap = false;
     bool movingPin = true;
     screens.push_back(&gameScreen);
 
@@ -215,7 +214,7 @@ int main()
                 if (movingPin) {
                     pin.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
                 }
-                if(lookingAtMap){
+                if(!lookingAtPicture){
                     window.draw(pin);
                 }
             }
