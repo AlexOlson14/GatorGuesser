@@ -164,7 +164,7 @@ int main()
 
                             randomImages.clear();
                             images.clear();
-                            for (int i = 1; i < 6; i++) {
+                            for (int i = 1; i < 7; i++) {
                                 Image image = imageManager.getImage();
                                 images.push_back(image);
                                 randomImages.push_back(TextureManager::getTexture(image.name));
@@ -252,6 +252,7 @@ int main()
                             
                             gameScreen.needToDraw = false;
                             answerScreen.needToDraw = true;
+
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
