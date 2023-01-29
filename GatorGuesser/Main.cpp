@@ -251,8 +251,6 @@ int main()
                             gameScreen.needToDraw = false;
                             answerScreen.needToDraw = true;
                             correctSpot.setPosition(images.at(counter).location.second, images.at(counter).location.first);
-                            cout << "X: " << images.at(counter).location.first << endl;
-                            cout << "Y: " << images.at(counter).location.second << endl << endl;
 
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
@@ -264,7 +262,9 @@ int main()
                         }
                     }
                     else if (answerScreen.needToDraw) {
-                    
+                        int distance = calculateDistance(pin.getPosition().x, pin.getPosition().y, correctSpot.getPosition().x, correctSpot.getPosition().y);
+                        int tempPoints = distanceToScore(distance);
+                        points += tempPoints;
                         if (answerScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             if (counter == randomImages.size() - 1) //last one
                             {
@@ -277,7 +277,7 @@ int main()
                                 sf::FloatRect textRect = text.getLocalBounds();
                                 text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
                                 text.setPosition(sf::Vector2f(pointScreen.spritesToDraw.find("text")->second.getGlobalBounds().width / 2.0f, pointScreen.spritesToDraw.find("text")->second.getGlobalBounds().height / 2.0f));
-
+                                
                             }
                             else
                             {
@@ -288,9 +288,12 @@ int main()
                     }
                     else if (pointScreen.needToDraw)
                     {
+                    answerScreen.spritesToDraw.emplace("background", bigMap);
                         if (pointScreen.spritesToDraw.find("button")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             titleMenu.needToDraw = true;
                             pointScreen.needToDraw = false;
+                            counter = 0;
+                            points = 0; 
                         }
                     }
                 }
@@ -318,6 +321,8 @@ int main()
                     sf::Vertex(sf::Vector2f(pin.getPosition().x, pin.getPosition().y)),
                     sf::Vertex(sf::Vector2f(correctSpot.getPosition().x, correctSpot.getPosition().y))
                 };
+
+                
                 line[0].color = sf::Color::Magenta;
                 line[1].color = sf::Color::Magenta;
                 window.draw(line, 2, sf::Lines);
