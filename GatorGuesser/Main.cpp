@@ -95,6 +95,8 @@ int main()
     sf::CircleShape pin;
     pin.setFillColor(sf::Color::Red);
     pin.setRadius(3);
+    pin.setOrigin(pin.getRadius(), pin.getRadius());
+
 
     ImageProvider imageManager;
 
@@ -115,7 +117,11 @@ int main()
     screens.push_back(&answerScreen);
     
     sf::Sprite bigMap(TextureManager::getTexture("map"));
-    sf::CircleShape correctSpot(3);
+    sf::CircleShape correctSpot;
+    correctSpot.setRadius(10);
+    correctSpot.setFillColor(sf::Color::Blue);
+    correctSpot.setOrigin(correctSpot.getRadius(), correctSpot.getRadius());
+
     answerScreen.spritesToDraw.emplace("background", bigMap);
     
     bool lookingAtPicture = true;
@@ -133,6 +139,9 @@ int main()
     pointScreen.spritesToDraw.emplace("button", returnBtn);
     pointScreen.spritesToDraw.emplace("text", pointThing);
     int points = 0;
+
+
+    vector<Image> images;
 
 
     while (window.isOpen())
@@ -154,9 +163,11 @@ int main()
                             window.display();
 
                             randomImages.clear();
-                            for (int i = 1; i < 5; i++) {
-                                string name = imageManager.getImage().name;
-                                randomImages.push_back(TextureManager::getTexture(name));
+                            images.clear();
+                            for (int i = 1; i < 6; i++) {
+                                Image image = imageManager.getImage();
+                                images.push_back(image);
+                                randomImages.push_back(TextureManager::getTexture(image.name));
                             }
 
                             gameScreen.needToDraw = true;
@@ -239,15 +250,21 @@ int main()
                             
                             gameScreen.needToDraw = false;
                             answerScreen.needToDraw = true;
+                            correctSpot.setPosition(images.at(counter).location.second, images.at(counter).location.first);
+                            cout << "X: " << images.at(counter).location.first << endl;
+                            cout << "Y: " << images.at(counter).location.second << endl << endl;
 
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
                             pointScreen.needToDraw = true;
                             gameScreen.needToDraw = false;
+                            //dont show title screen, show answer screen then show final score screen
+
                         }
                     }
                     else if (answerScreen.needToDraw) {
+                    
                         if (answerScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             if (counter == randomImages.size() - 1) //last one
                             {
@@ -292,6 +309,18 @@ int main()
                 if(!lookingAtPicture){
                     window.draw(pin);
                 }
+            }
+            if (answerScreen.needToDraw) {
+                window.draw(pin);
+                window.draw(correctSpot);
+                sf::Vertex line[] =
+                {
+                    sf::Vertex(sf::Vector2f(pin.getPosition().x, pin.getPosition().y)),
+                    sf::Vertex(sf::Vector2f(correctSpot.getPosition().x, correctSpot.getPosition().y))
+                };
+                line[0].color = sf::Color::Magenta;
+                line[1].color = sf::Color::Magenta;
+                window.draw(line, 2, sf::Lines);
             }
         }
         if (pointScreen.needToDraw)

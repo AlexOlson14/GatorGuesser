@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <fstream>
 #include "ImageProvider.h"
+#include <time.h>
 
 ImageProvider::ImageProvider() {
     srand(time(nullptr));
