@@ -164,7 +164,7 @@ int main()
 
                             randomImages.clear();
                             images.clear();
-                            for (int i = 1; i < 6; i++) {
+                            for (int i = 1; i < 7; i++) {
                                 Image image = imageManager.getImage();
                                 images.push_back(image);
                                 randomImages.push_back(TextureManager::getTexture(image.name));
@@ -228,6 +228,7 @@ int main()
 
                         else if (counter < randomImages.size() - 1 && !lookingAtPicture) //not last
                         {
+                            correctSpot.setPosition(images.at(counter).location.second, images.at(counter).location.first);
                             counter++;
 
                            
@@ -251,7 +252,7 @@ int main()
                             
                             gameScreen.needToDraw = false;
                             answerScreen.needToDraw = true;
-                            correctSpot.setPosition(images.at(counter).location.second, images.at(counter).location.first);
+                            
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
@@ -268,6 +269,7 @@ int main()
                         if (answerScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             if (counter == randomImages.size() - 1) //last one
                             {
+                                cout << randomImages.size();
                                 pointScreen.needToDraw = true;
                                 answerScreen = false;
                                 string result = to_string(points);
