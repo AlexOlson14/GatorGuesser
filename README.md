@@ -1,3 +1,3 @@
 # GatorGuesser
 #To run code
-#Clone entire gitHub page, then launch the .exe file in the folder
+Clone entire github then run .exe file from in the folder
