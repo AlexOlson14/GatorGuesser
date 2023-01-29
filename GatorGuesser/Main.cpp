@@ -272,7 +272,7 @@ int main()
                                 pointScreen.needToDraw = true;
                                 answerScreen = false;
                                 string result = to_string(points);
-                                result += " / 5500";
+                                result += " / 5000";
                                 // set the string to display
                                 text.setString(result);
                                 sf::FloatRect textRect = text.getLocalBounds();
