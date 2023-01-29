@@ -324,6 +324,24 @@ int main()
                     sf::Vertex(sf::Vector2f(correctSpot.getPosition().x, correctSpot.getPosition().y))
                 };
 
+                sf::Text information;
+                information.setFont(font);
+
+                information.setCharacterSize(40);
+
+                information.setFillColor(sf::Color::Black);
+                information.setPosition(100, 800);
+                information.setStyle(sf::Text::Bold | sf::Text::Underlined);
+                int distance = calculateDistance(pin.getPosition().x, pin.getPosition().y, correctSpot.getPosition().x, correctSpot.getPosition().y);
+                information.setString("You were " + to_string(pixelsToFeet(distance)) + " feet away from the correct spot!");
+
+                sf::RectangleShape shader(sf::Vector2f(1000, 100));
+                shader.setPosition(80, 775);
+                shader.setFillColor(sf::Color(166, 166, 166, 255));
+                window.draw(shader);
+
+                window.draw(information);
+
                 
                 line[0].color = sf::Color::Magenta;
                 line[1].color = sf::Color::Magenta;
