@@ -1,3 +1,2 @@
 # GatorGuesser
-#To run code
-Clone entire github then run .exe file from in the folder
+#To run code 1. Clone entire github 2. Run .exe file from GatorGuesser folder
