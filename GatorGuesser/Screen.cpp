@@ -29,6 +29,7 @@ void Screen::showScreen(sf::RenderWindow& w) {
 }
 
 void Screen::setText(string text_to_output, string where_to_display) {
+    cout << text_to_output;
     sf::Text* _text = new sf::Text();
     _text->setFont(*_font);
     _text->setString(text_to_output);

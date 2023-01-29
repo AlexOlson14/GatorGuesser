@@ -43,8 +43,34 @@ int main()
     
     sf::Texture map = TextureManager::getTexture("map");
 
-   
+    sf::Font font;
+    if (!font.loadFromFile("OpenSans-Regular.ttf"))
+    {
+        cout << "problem loading font" << endl;
+    }
+    sf::Text text;
+
+    // select the font
+    text.setFont(font); // font is a sf::Font
+
+    // set the character size
+    text.setCharacterSize(40); // in pixels, not points!
+
+    // set the color
+    text.setFillColor(sf::Color::Black);
     
+    // set the text style
+    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+
+        // inside the main loop, between window.clear() and window.display()
+        window.draw(text);
+
+
+
+
+
+
     //Title Screen setup
     Screen titleMenu(true);
     screens.push_back(&titleMenu);
@@ -94,7 +120,20 @@ int main()
     
     bool lookingAtPicture = true;
 
- 
+    Screen pointScreen(false);
+    screens.push_back(&pointScreen);
+
+    sf::Sprite returnBtn(TextureManager::getTexture("Return"));
+    returnBtn.setPosition(400, 500);
+    sf::Sprite background(TextureManager::getTexture("points"));
+    sf::Sprite pointThing(TextureManager::getTexture("Score"));
+    pointThing.setPosition(400, 300);
+    
+    pointScreen.spritesToDraw.emplace("background", background);
+    pointScreen.spritesToDraw.emplace("button", returnBtn);
+    pointScreen.spritesToDraw.emplace("text", pointThing);
+    int points = 0;
+
 
     while (window.isOpen())
     {
@@ -204,14 +243,37 @@ int main()
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
-                            titleMenu.needToDraw = true;
+                            pointScreen.needToDraw = true;
                             gameScreen.needToDraw = false;
                         }
                     }
                     else if (answerScreen.needToDraw) {
                         if (answerScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                            answerScreen.needToDraw = false;
-                            gameScreen.needToDraw = true;
+                            if (counter == randomImages.size() - 1) //last one
+                            {
+                                pointScreen.needToDraw = true;
+                                answerScreen = false;
+                                string result = to_string(points);
+                                result += " / 5500";
+                                // set the string to display
+                                text.setString(result);
+                                sf::FloatRect textRect = text.getLocalBounds();
+                                text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+                                text.setPosition(sf::Vector2f(pointScreen.spritesToDraw.find("text")->second.getGlobalBounds().width / 2.0f, pointScreen.spritesToDraw.find("text")->second.getGlobalBounds().height / 2.0f));
+
+                            }
+                            else
+                            {
+                                answerScreen.needToDraw = false;
+                                gameScreen.needToDraw = true;
+                            }
+                        }
+                    }
+                    else if (pointScreen.needToDraw)
+                    {
+                        if (pointScreen.spritesToDraw.find("button")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            titleMenu.needToDraw = true;
+                            pointScreen.needToDraw = false;
                         }
                     }
                 }
@@ -231,6 +293,10 @@ int main()
                     window.draw(pin);
                 }
             }
+        }
+        if (pointScreen.needToDraw)
+        {
+            window.draw(text);
         }
         window.display();
     }
