@@ -115,7 +115,7 @@ int main()
                             window.display();
 
                             randomImages.clear();
-                            for (int i = 1; i < 6; i++) {
+                            for (int i = 1; i < 5; i++) {
                                 string name = imageManager.getImage().name;
                                 randomImages.push_back(TextureManager::getTexture(name));
                             }
@@ -178,6 +178,9 @@ int main()
                         else if (counter < randomImages.size() - 1 && !lookingAtPicture) //not last
                         {
                             counter++;
+
+                           
+
                             gameScreen.spritesToDraw.erase("background");
                             gameScreen.spritesToDraw.erase("picture");
 
@@ -194,11 +197,21 @@ int main()
                             gameScreen.spritesToDraw.emplace("background", background);
                             gameScreen.spritesToDraw.emplace("picture", picture);
                             lookingAtPicture = true;
+                            
+                            gameScreen.needToDraw = false;
+                            answerScreen.needToDraw = true;
+
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
                             titleMenu.needToDraw = true;
                             gameScreen.needToDraw = false;
+                        }
+                    }
+                    else if (answerScreen.needToDraw) {
+                        if (answerScreen.spritesToDraw.find("background")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                            answerScreen.needToDraw = false;
+                            gameScreen.needToDraw = true;
                         }
                     }
                 }
