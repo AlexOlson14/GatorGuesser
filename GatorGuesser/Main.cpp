@@ -174,6 +174,7 @@ int main()
                             gameScreen.spritesToDraw.find("background")->second.setTexture(randomImages[0]);    
                             gameScreen.spritesToDraw.find("picture")->second.setTexture(map);
                             counter = 0;
+                            points = 0;
                         }
                         else if (titleMenu.spritesToDraw.find("Quit")->second.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                             window.close();
@@ -251,9 +252,6 @@ int main()
                             gameScreen.needToDraw = false;
                             answerScreen.needToDraw = true;
                             correctSpot.setPosition(images.at(counter).location.second, images.at(counter).location.first);
-                            cout << "X: " << images.at(counter).location.first << endl;
-                            cout << "Y: " << images.at(counter).location.second << endl << endl;
-
                         }
                         else if (counter == randomImages.size() - 1 && !lookingAtPicture) //last one
                         {
@@ -276,7 +274,8 @@ int main()
                                 text.setString(result);
                                 sf::FloatRect textRect = text.getLocalBounds();
                                 text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-                                text.setPosition(sf::Vector2f(pointScreen.spritesToDraw.find("text")->second.getGlobalBounds().width / 2.0f, pointScreen.spritesToDraw.find("text")->second.getGlobalBounds().height / 2.0f));
+                                text.setPosition(pointThing.getPosition().x + pointThing.getTextureRect().width/2, 
+                                    pointThing.getPosition().y + pointThing.getTextureRect().height / 2);
 
                             }
                             else
